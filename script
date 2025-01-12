@@ -1,0 +1,128 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <queue> 
+
+using namespace std;
+
+struct Buku {
+    string judul;
+    string penulis;
+    float harga;
+};
+
+// Function to print the header of the book table
+void cetakHeader() {
+    cout << left << setw(30) << "Judul" 
+         << setw(25) << "Penulis" 
+         << setw(10) << "Harga" 
+         << endl;
+    cout << string(65, '-') << endl; 
+}
+
+// Function to print details of a book
+void cetakBuku(const Buku &b) {
+    cout << left << setw(30) << b.judul 
+         << setw(25) << b.penulis 
+         << setw(10) << fixed << setprecision(2) << "Rp " << b.harga 
+         << endl;
+}
+
+// Function to search for a book by title
+void cariBuku(queue<Buku> antrianBuku, const string &judul) {
+    bool found = false;
+    while (!antrianBuku.empty()) {
+        if (antrianBuku.front().judul == judul) {
+            cout << "Buku ditemukan:" << endl;
+            cetakBuku(antrianBuku.front());
+            found = true;
+            break;
+        }
+        antrianBuku.pop();
+    }
+    if (!found) {
+        cout << "Buku dengan judul \"" << judul << "\" tidak ditemukan." << endl;
+    }
+}
+
+int main() {
+    const int MAX_BUKU = 3; // Maximum number of books
+    queue<Buku> antrianBuku; 
+    char pilihan;
+    
+    // Input books data
+    for (int i = 0; i < MAX_BUKU; i++) {
+        Buku bukuBaru;
+        cout << "Masukkan data buku ke-" << (i + 1) << endl;
+        cout << "Judul: ";
+        getline(cin, bukuBaru.judul);
+        
+        if (bukuBaru.judul.empty()) { 
+            break; // Stop input if title is empty
+        }
+        
+        cout << "Penulis: ";
+        getline(cin, bukuBaru.penulis);
+        
+        cout << "Harga: ";
+        cin >> bukuBaru.harga;
+        cin.ignore(); // Clear input buffer
+        
+        antrianBuku.push(bukuBaru); // Add book to the queue
+        cout << endl; // New line for formatting
+    }
+
+    // Print book table
+    cout << "Tabel Buku:" << endl;
+    cetakHeader();
+    queue<Buku> tempQueue = antrianBuku; // Temporary queue to show books
+    while (!tempQueue.empty()) {
+        cetakBuku(tempQueue.front());
+        tempQueue.pop();
+    }
+    
+    // Menu for deleting a book
+    do {
+        cout << "\nApakah Anda ingin menghapus buku paling depan? (y/n): ";
+        cin >> pilihan;
+        cin.ignore(); // Clear input buffer 
+        
+        if (pilihan == 'y' || pilihan == 'Y') {
+            // Check if the queue is not empty before popping
+            if (!antrianBuku.empty()) {
+                cout << "Menghapus buku: " << endl;
+                cetakBuku(antrianBuku.front()); 
+                antrianBuku.pop(); // Remove the front book
+            } else {
+                cout << "Antrian buku sudah kosong!" << endl;
+            }
+        }
+        
+        // Print updated book list after deletion
+        cout << "\nDaftar Buku Setelah Penghapusan:" << endl;
+        cetakHeader();
+        tempQueue = antrianBuku; // Reset temporary queue to show updated books
+        while (!tempQueue.empty()) {
+            cetakBuku(tempQueue.front());
+            tempQueue.pop();
+        }
+
+    } while (pilihan == 'y' || pilihan == 'Y');
+
+    // Menu for searching a book
+    do {
+        cout << "\nApakah Anda ingin mencari buku? (y/n): ";
+        cin >> pilihan;
+        cin.ignore(); // Clear input buffer 
+        
+        if (pilihan == 'y' || pilihan == 'Y') {
+            string judulCari;
+            cout << "Masukkan judul buku yang dicari: ";
+            getline(cin, judulCari);
+            cariBuku(antrianBuku, judulCari);
+        }
+
+    } while (pilihan == 'y' || pilihan == 'Y');
+
+    return 0;
+}
