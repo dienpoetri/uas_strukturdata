@@ -4,4 +4,4 @@
 # nim : 2305101147
 # mata kuliah : STRUKTUR DATA
 # semoga mendapatkan nilai bagus dan bisa lulus dengan memuaskan. terimakasih.
-# https://youtu.be/fbWOamY9ci0
+# link youtube https://youtu.be/fbWOamY9ci0
